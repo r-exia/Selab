@@ -1,5 +1,6 @@
 Bài tập Assignment 3: .Net Maui + Sqlite
 Dự án này em sử dụng .Net Maui sử dụng Blazor html css javascript để xậy dựng giao diện app.
+Lập trinh xử lý dữ liệu là c#.
 
 Demo:
 
