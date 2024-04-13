@@ -1,0 +1,17 @@
+﻿@inject NavigationManager NavigationManager
+<div @onclick="GotoDetail" class="flex flex-col" style="justify-content: center; align-items: center; width: 20%">
+    <img style="object-fit: contain; width: 30px; height: 30px" src="@icon" />
+</div>
+
+@code {
+    [Parameter]
+    public string icon { get; set; }
+
+    [Parameter]
+    public string url { get; set; }
+
+    public async Task GotoDetail()
+    {
+        NavigationManager.NavigateTo(url);
+    }
+}

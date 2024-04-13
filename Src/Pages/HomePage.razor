@@ -1,0 +1,32 @@
+﻿@page "/"
+    <div style="width: 100%; height:92%; background-color: white; overflow: auto; padding-bottom: 5%">
+    
+   
+        @foreach (var video in videos)
+        {
+            <VideoCardComponent video="@video" />
+        }
+
+   
+    </div>
+
+
+
+
+@code {
+
+    private appColor appColor = new appColor();
+    private List<Video> videos = new List<Video>();
+    private appImage appImage = new appImage();
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        videos = await Database.GetVideoListAsync();
+     
+    }
+  
+}
+

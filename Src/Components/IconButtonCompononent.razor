@@ -1,0 +1,12 @@
+﻿<div class="flex flex-col" style="align-items:center; justify-content:center; width: 4rem">
+    <img class="object-contain" style="width: 20px; height: 20px" src="@icon" />
+    <span style="color: @appColor.gray; font-size: 12px">@name</span>
+</div>
+@code {
+    private appColor appColor = new appColor();
+
+    [Parameter]
+    public string icon { get; set; }
+    [Parameter]
+    public string name { get; set; }
+}

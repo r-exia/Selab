@@ -1,0 +1,46 @@
+﻿@inject NavigationManager NavigationManager
+
+<div @onclick="GotoDetail" class="flex flex-row" style="width: 100%; height: 8rem; ">
+    <div style="width: 55%; height:100%; position:relative; margin-top: -2%; ">
+        <img loading="lazy" style="object-fit:contain; width:100%;height:100%; border-radius:0.375rem; " src="@video.imageUrl" />
+        <div onclick="rounded-b-md" class="bg-gradient-to-t from-black to-transparent flex flex-row-reverse" style="position: absolute; width:100%; height: 10%; align-items:end; bottom: 5%; display: flex;border-bottom-left-radius: 0.375rem; border-bottom-right-radius:0.375rem; ">
+            <span style="color: white; font-size:12px; ">@video.time</span>
+        </div>
+    </div>
+    <div class="flex flex-col" style="width: 45%; height:100%; padding-left: 5px">
+        <span style="font-size: 14px; font-weight:500; max-height: 3rem">@video.title</span>
+        <div class="flex flex-row space-x-2" style="align-items: center">
+
+            <img loading="lazy" style="object-fit:contain; width:15px; height:15px; border-radius:100%" src="@user.avatar" />
+     
+            <span style="color: @appColor.gray; font-size: 13px">@user.actor</span>
+        </div>
+        <span style="color: @appColor.gray; font-size: 13px">@video.view</span>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Video video { get; set; } = new Video();
+
+    private List<User> users = new List<User>();
+    private User user = new User();
+
+    private appColor appColor = new appColor();
+
+    public async Task GotoDetail()
+    {
+        NavigationManager.NavigateTo($"/detailplayer/{video.id}", true);
+    }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        users = await Database.GetUserListAsync();
+        user = users.FirstOrDefault(x => x.id == video.usersId);
+     
+    }
+
+}

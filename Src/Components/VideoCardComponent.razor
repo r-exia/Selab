@@ -1,0 +1,75 @@
+﻿@inject NavigationManager NavigationManager
+
+    <div @onclick="GotoDetail" class="  w-full  px-1 pt-1   " style="margin-bottom: 10px; ">
+        <div class=" w-full   relative overflow-hidden     ">
+            <img loading="lazy" class="object-cover rounded  " src="@video.imageUrl" />
+            <div class=" absolute px-1 w-full rounded-b items-end h-10 bg-gradient-to-t from-black to-transparent flex flex-row bottom-0">
+                <div class="w-[90%] h-full  flex flex-row  items-end space-x-2  ">
+                    <div class=" flex flex-row items-center ">
+                        <img width="20" height="20" src="@appImage.IconView" alt="youtube-play--v1" />
+                        <span class="text-white ">@video.view</span>
+                    </div>
+
+                    <div class=" flex flex-row items-center  ">
+                        <img class=" " width="20" height="20" src="@appImage.IconComment" alt="comments" />
+                        <span class="text-white">@video.commentVideo</span>
+                    </div>
+
+                </div>
+                <div class="w-[10%] h-full flex items-end justify-end">
+                    <span class="text-white">@video.time</span>
+                </div>
+            </div>
+        </div>
+    @foreach (var user in users.Where(x => x.id == video.usersId).ToList() )
+    {
+      
+            <div class="  w-full h-11 pt-1 flex flex-row overflow-hidden  ">
+                <div class="flex" style="width: 14%;  justify-content:center; align-items: center">
+                    <img loading="lazy" class="object-cover " style=" border-radius: 100%; height: 75%" src="@user.avatar" />
+                </div>
+                <div style="width: 75%">
+                    <h1 class="overflow-hidden text-clip " style="height: 50%;font-size: 14px; font-weight:700">@video.title</h1>
+                    <span style="color: gray">@user.actor</span>
+                </div>
+
+                <div class="flex active:bg-violet-700" style="width: 11%; justify-content:center; align-items:center ">
+                    <img loading="lazy" class="object-cover " style=" border-radius: 50%; height: 50%" src="@appImage.IconOption" alt="external-more-neu-development-neu-royyan-wijaya" />
+                </div>
+
+            </div>
+      
+       
+    }
+   
+
+
+
+    </div>
+
+
+ 
+
+
+
+
+@code {
+    private appImage appImage = new appImage();
+
+    [Parameter]
+    public Video video { get; set; } = new Video();
+
+    public List<User> users = new List<User>();
+
+    public async Task GotoDetail()
+    {
+        NavigationManager.NavigateTo($"/detailplayer/{video.id}");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        users = await Database.GetUserListAsync();
+        //user = users.Find(x => x.id == video.usersId);
+    }
+}

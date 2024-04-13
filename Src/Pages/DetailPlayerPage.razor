@@ -1,0 +1,112 @@
+﻿@page "/detailplayer/{vid:int}"
+@inject IJSRuntime JSRuntime
+
+
+
+<div class="w-full" style="height: 15rem">
+        <NavLink href="/" style="position:absolute; top: 0.5rem; left:0.5rem;">
+            <img width="20" height="20" src="@appImage.IconBackWhite" alt="back" />
+        </NavLink>
+        <div class="w-full  ">
+            <div id="player" class="w-full " style="height: 12.8rem; background-color: black"></div>
+        </div>
+        <div class="w-full" style=" box-shadow: 0px 4px 8px @appColor.gray40; height: 2.8rem">
+            <div class="flex flex-row w-full h-10  " style="padding: 0.6rem">
+                <div style="color: @appColor.primary; font-weight:500; width: 6rem ">Giới thiệu</div>
+                <div style="color: @appColor.gray;font-weight:500;width: 6rem">Bình luận</div>
+            </div>
+            <div style="width: 8rem;  height:4px;  margin-top: -0.3rem; margin-left: 1rem">
+                <div class="rounded-md" style="background-color: @appColor.primary; width: 3.2rem; height:4px"></div>
+            </div>
+        </div>
+    </div>
+<div   style="margin-top: 0.7rem; width:100%; height:150vw;  overflow:auto">
+    <div style=" padding: 0 0.6rem 0 0.6rem;  max-height: 4rem">
+        <span style="font-weight:600; font-size:17px">@video.title</span>
+    </div>
+    <div class=" flex flex-row" style="width: 100%; justify-content:space-between;padding: 0 0.6rem 0 0.6rem; ">
+        <div class="flex flex-row" >
+            <img width="20" height="20" src="@appImage.IconViewGray" />
+            <span style="color: @appColor.gray; font-size:14px">@video.view</span>
+        </div>
+        <div class="flex" style="justify-content:center;  align-items:center">
+            <img class="object-contain" style="width:15px; height:15px" src="@appImage.IconRightGray" />
+        </div>
+    </div>
+    <div class="flex flex-row space-x-3" style="padding: 0 0.7rem 0 0.7rem; margin: 1.3rem 0 1.3rem 0">
+       
+        <IconButtonCompononent icon="@appImage.IconLike" name="@video.like.ToString()" />
+        <IconButtonCompononent icon="@appImage.IconPlus" name="Yêu thích" />
+        <IconButtonCompononent icon="@appImage.IconDonate" name="Ủng hộ" />
+        <IconButtonCompononent icon="@appImage.IconDownload" name="Tải xuống" />
+        <IconButtonCompononent icon="@appImage.IconShare" name="Chia sẻ" />
+      
+    </div>
+
+        <div class="flex flex-row " style="width: 100%; border-color: @appColor.gray40; height: 4rem;  border-top-style: solid; border-bottom-style:solid; border-width: 2px; align-items: center; padding-right: 0.6rem">
+            <div style="width:15%; height:100%; display: flex; justify-content:center; align-items:center">
+            <img class=" " style="width: 35px; height:35px; border-radius:100%; object-fit:contain  " src="@user.avatar" />
+        </div>
+        <div class="flex flex-col" style="width:60%; height:100%; justify-content: center">
+            <span style="font-weight:500">@user.actor</span>
+            <span style="color: @appColor.gray">1 Theo dõi</span>
+        </div>
+        <div class="flex rounded-md" style="width:25%; height:60%; justify-content:center; align-items: center; border:solid; border-width: 1px; border-color: @appColor.primary">
+            <span style="color: @appColor.primary; font-size: 14px; font-weight:500">Theo dõi</span>
+        </div>
+    </div>
+
+    <div style="margin: 0.6rem">
+        <span style="font-weight:600">Đề xuất cho bạn</span>
+    </div>
+    <div style="margin: 0 0.6rem 0 0.6rem">
+        @foreach (var videoPrs in videoPreview.Where(x => x.id != vid).ToList())
+        {
+             <VideoPreviewCardComponent video="@videoPrs" />
+        }
+
+    </div>
+</div>
+
+
+
+
+
+
+@code {
+    [Parameter]
+    public int? vid { get; set; }
+
+    appImage appImage = new appImage();
+    appColor appColor = new appColor();
+
+
+    public List<Video> videos = new List<Video>();
+    public List<User> users = new List<User>();
+    public List<Video> videoPreview = new List<Video>();
+
+    public Video video = new Video();
+    private User user = new User();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        videos = await Database.GetVideoListAsync();
+        users = await Database.GetUserListAsync();
+
+        video =  videos.FirstOrDefault(x => x.id == vid);
+        user = users.FirstOrDefault(x => x.id == video.usersId);
+
+        videoPreview = await Database.GetVideoListAsync();
+
+        await JSRuntime.InvokeVoidAsync("setVideoId", video.videoUrl);
+        await JSRuntime.InvokeVoidAsync("onYouTubeIframeAPIReady");
+        // set video id
+       
+        //
+     
+
+    }
+
+   
+}

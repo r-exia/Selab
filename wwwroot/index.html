@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Selab</title>
+    <base href="/" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="Selab.styles.css" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+</head>
+
+<body>
+
+    <div class="status-bar-safe-area"></div>
+
+    <div id="app">Loading...</div>
+
+    <script src="_framework/blazor.webview.js" autostart="false"></script>
+    <script src="https://www.google.com/jsapi"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+   
+    <script>
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var idCreate;
+        let idVideo;
+        function setIdCreate(id) {
+            idVideo = id;
+        }
+        function CheckVideoIframAPI() {
+            idCreate = new YT.Player('idCreate', {
+                width: '100%',
+                heigh: '6rem',
+                videoId: idVideo,
+                playerVars: {
+                    'playsinline': 1,
+                    'cc_load_policy': 0,
+                    'cc_lang_pref': 'vi',
+                },
+            });
+        }
+
+        var player;
+        let videoId;
+        function setVideoId(vid) {
+            videoId = vid;
+        }
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                width: '100%',
+                heigh: '300px',
+                videoId: videoId,
+                playerVars: {
+                    'playsinline': 1,
+                    'cc_load_policy': 0,
+                    'cc_lang_pref': 'vi',
+
+
+                },
+                events: {
+                    'onReady': onPlayerReady,
+
+                }
+
+            });
+        }
+        function onPlayerReady(event) {
+            event.target.playVideo();
+
+        }
+    </script>
+</body>
+
+</html>
